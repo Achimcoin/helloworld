@@ -1,0 +1,35 @@
+name: Build and Deploy Hello World
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Prepare Build
+      run: |
+        mkdir -p build
+        cp src/index.html build/
+
+    - name: Install SSH Client
+      run: sudo apt-get install -y sshpass
+
+    - name: Deploy to Strato
+      env:
+        FTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
+        FTP_USER: ${{ secrets.STRATO_SFTP_USER }}
+        FTP_PASSWORD: ${{ secrets.STRATO_SFTP_PASSWORD }}
+      run: |
+        export SSHPASS=$FTP_PASSWORD
+        sshpass -e sftp -oBatchMode=no -o StrictHostKeyChecking=no $FTP_USER@$FTP_HOST << EOF
+          mkdir -p /helloworld || true
+          put -r ./build/* /helloworld/
+        EOF

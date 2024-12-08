@@ -1,0 +1,8 @@
+{
+  "name": "hello-world-app",
+  "version": "1.0.0",
+  "description": "A simple Hello World app",
+  "scripts": {
+    "build": "mkdir -p build && cp src/index.html build/"
+  }
+}
