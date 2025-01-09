@@ -30,6 +30,6 @@ jobs:
       run: |
         export SSHPASS=$FTP_PASSWORD
         sshpass -e sftp -oBatchMode=no -o StrictHostKeyChecking=no $FTP_USER@$FTP_HOST << EOF
-          mkdir -p /interface || true
-          put -r ./build/* /interface/
+          mkdir -p /helloworld || true
+          put -r ./build/* /helloworld/
         EOF
